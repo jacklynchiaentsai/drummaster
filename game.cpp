@@ -1,17 +1,22 @@
 // include libraries: telling the arduino to use the library "LiquidCrystal.h"
 #include <LiquidCrystal.h>
-// **potential modification** - higher numbers = faster game speed up
-int intGameSpeedEasy = 10;
-int intGameSpeedMedium = 25;
-int intGameSpeedHard = 80; 
+
 // **potential modification** Define pins we are using for our buttons
+//format: define [variablename] [portNum]
+/* Although we are calling the ports port 15, 16, 17 and 18, they are labelled on the arduino as A1 A2 A3 and A4, 
+this is because they are ports used specifically for analog inputs, although we are only using them for digital inputs. */
 #define btnEnter A0
 #define btn1 15
 #define btn2 16
 #define btn3 17
-#define btn4 18</p><p>// create LCD objects (n, ~, n, ~, ~, n)
+#define btn4 18 // create LCD objects (n, ~, n, ~, ~, n)
+
+/* tells the arduino that when we call lcdLeft or lcdRight we are refering to a LiquidCrystal object. 
+The numbers in the attached brackets tell the arduino which ports the object should be using to send messages to the LCD when we use their functions. */
 LiquidCrystal lcdLeft(8, 9, 12, 10, 11, 13);
-LiquidCrystal lcdRight(2, 3, 4, 5, 6, 7);</p><p>// set up game array
+LiquidCrystal lcdRight(2, 3, 4, 5, 6, 7);
+
+// set up game array
 int arrGame[16][4] = {
   {0, 0, 0, 0},
   {0, 0, 0, 0},
@@ -29,17 +34,29 @@ int arrGame[16][4] = {
   {0, 0, 0, 0},
   {0, 0, 0, 0},
   {0, 0, 0, 0}
-};</p><p>//set up variables for the game
+};
+
+//set up variables for the game
+// **potential modification** game speed variables: higher numbers = faster game speed up
+int intGameSpeedEasy = 10;
+int intGameSpeedMedium = 25;
+int intGameSpeedHard = 80; 
 boolean bolPlay;            //tracks if the player 
 int intScore;               //tracks the player's score
-int intDiff;                //just an estetic thing for telling what difficulty the game is on</p><p>//set up variables for input
-int intEnter;               //trackes if the user presses the enter button
+int intDiff;                //just an estetic thing for telling what difficulty the game is on
+
+//set up variables for input
+int intEnter;               //trackes if the user presses the enter button ** potential modification** - designating the enter button
 int intInput;               //tracks which buttons the user presses
-boolean bolTilePressed;     //ensure the player doesn't accidently press a button 5x and lose</p><p>//set up variables for turn
+boolean bolTilePressed;     //ensure the player doesn't accidently press a button 5x and lose
+
+//set up variables for turn
 int intTick;                //counts up millies (per loop) until intDelay
 int intDelay;               //the time the program waits till the next turn in millis
-int intGameSpeed;</p><p>//abit of debug options
-boolean bolSerialBoard;     //when true will print the board in the serial monitor</p><p>//the setup that will be run once
+int intGameSpeed; //abit of debug options
+boolean bolSerialBoard;     //when true will print the board in the serial monitor
+
+//the setup that will be run once
 void setup() {
   Serial.begin(9600);       //start the serial monitor
   //set up the variables
