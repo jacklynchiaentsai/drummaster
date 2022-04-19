@@ -1,7 +1,4 @@
-<p>/*<br> * Name         - Piano Tiles; Arduino
- * By           - Domenic Marulli
- * Date         - 11/11/2018
- *</p><p>/ include libraries
+<p>/ include libraries
 #include <LiquidCrystal.h>
 </p><p>//these variables are options that you can change - higher numbers = faster game speed up
 int intGameSpeedEasy = 10;
