@@ -1,6 +1,11 @@
 // include libraries: telling the arduino to use the library "LiquidCrystal.h"
 #include <LiquidCrystal.h>
 
+// **potential modification** game speed variables: higher numbers = faster game speed up
+int intGameSpeedEasy = 10;
+int intGameSpeedMedium = 25;
+int intGameSpeedHard = 80; 
+
 // **potential modification** Define pins we are using for our buttons
 //format: define [variablename] [portNum]
 /* Although we are calling the ports port 15, 16, 17 and 18, they are labelled on the arduino as A1 A2 A3 and A4, 
@@ -37,20 +42,16 @@ int arrGame[16][4] = {
 };
 
 //set up variables for the game
-// **potential modification** game speed variables: higher numbers = faster game speed up
-int intGameSpeedEasy = 10;
-int intGameSpeedMedium = 25;
-int intGameSpeedHard = 80; 
-boolean bolPlay;            //tracks if the player 
-int intScore;               //tracks the player's score
-int intDiff;                //just an estetic thing for telling what difficulty the game is on
+boolean bolPlay;            // tells the program if the menu should be displayed or if the actual game should be running 
+int intScore;               // tracks the player's score
+int intDiff;                // telling what difficulty the game is on: used on the main menu to tell the program what bit of text to print on the LCD's
 
 //set up variables for input
-int intEnter;               //trackes if the user presses the enter button ** potential modification** - designating the enter button
+int intEnter;               //trackes if the user presses the enter button(furthest left?) ** potential modification** - designating the enter button
 int intInput;               //tracks which buttons the user presses
-boolean bolTilePressed;     //ensure the player doesn't accidently press a button 5x and lose
+boolean bolTilePressed;     //ensure the player doesn't accidently press a button 5x and lose: make sure the program only reads on when the button is pressed and not when it is held
 
-//set up variables for turn
+//set up variables for turn: stop the program from moving the board every time it loops
 int intTick;                //counts up millies (per loop) until intDelay
 int intDelay;               //the time the program waits till the next turn in millis
 int intGameSpeed; //abit of debug options
