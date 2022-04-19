@@ -57,31 +57,34 @@ int intDelay;               //the time the program waits till the next turn in m
 int intGameSpeed; //abit of debug options
 boolean bolSerialBoard;     //when true will print the board in the serial monitor
 
-//the setup that will be run once
+//the setup that will be run once: setting default values
 void setup() {
   Serial.begin(9600);       //start the serial monitor
   //set up the variables
-  bolPlay = false;
+  bolPlay = false;    // the game doesn't start playing immediately
   intScore = 0;
   intTick = 0;
   intDelay = 1000;
   intDiff = 1;
   intGameSpeed = intGameSpeedMedium;
+  
   //begin lcd's
   lcdLeft.begin(16,2);
   lcdRight.begin(16,2);
-}</p><p>//the loop which will be run every 10 millisecons
+}
+
+//the loop which will be run every 10 millisecons
 void loop() {
-  input();                        //check for playing input
+  input();                        //check for playing input: reads which buttons the user has pressed
   if (bolPlay == true){     
     if (intTick >= intDelay){     //check to see if the game should play a turn or continue to wait
-      Serial.println("~~~~~~~~~");//print to signify the board moving on
+      Serial.println("~~~~~~~~~"); //print to signify the board moving on
       //writeSerial();              //if option is enabled write the board into serial
-      buttonsGame();              //check for player inputs
-      playBoard();                //move the board and add a new tile
+      buttonsGame();              //check for player inputs: controls what the buttons do when in the game, and not in the menu
+      playBoard();                //adds a new tile to the board, and then moves everything in the board down one space
       clearLcd();                 //clean the LCDs before drawing
       drawBoard();                //draw the board onto the lcd's
-      bottomCheck();
+      bottomCheck();              // checks the bottom of arrGame for a failure condition
       intTick = 0;                //reset intTick
     } else {
       buttonsGame();                         //check for player inputs
@@ -92,11 +95,13 @@ void loop() {
   } else {
     clearLcd();                   //clean the LCDs before drawing
     title();                      //display title and score info
-    buttonsMenu();                //read player input
+    buttonsMenu();                // controls what the user's inputs do when in the menu
     clearBoard();                 //ensure the whole board = 0
   }
   delay(10);                      //delay the arduino by a short moment
-}</p><p>//cleans the lcd, so any unentered cells arn't left there
+}
+
+//cleans the lcd, so any unentered cells arn't left there
 void clearLcd() {
   for (int i = 0; i <= 15; i++){
     for (int ii = 0; ii <= 1; ii++){
