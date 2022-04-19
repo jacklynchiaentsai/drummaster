@@ -1,9 +1,10 @@
-<p>/ include libraries
+// include libraries: telling the arduino to use the library "LiquidCrystal.h"
 #include <LiquidCrystal.h>
-</p><p>//these variables are options that you can change - higher numbers = faster game speed up
+// **potential modification** - higher numbers = faster game speed up
 int intGameSpeedEasy = 10;
 int intGameSpeedMedium = 25;
-int intGameSpeedHard = 80;</p><p>// Define pins
+int intGameSpeedHard = 80; 
+// **potential modification** Define pins we are using for our buttons
 #define btnEnter A0
 #define btn1 15
 #define btn2 16
