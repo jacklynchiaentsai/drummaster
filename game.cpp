@@ -183,7 +183,7 @@ void title() {
     lcdRight.write("Hard");
   }
   
-  //Press a little bit of instruction
+  //Press a little bit of instruction ** potential modification: we might be able to skip the enter **
   lcdLeft.setCursor(0, 0);
   lcdLeft.write("Press Enter");
   lcdLeft.setCursor(0, 1);
@@ -199,7 +199,11 @@ void buttonsMenu(){
     playBoard();
     drawBoard();
   }
-  // when button 3 is pressed turn on debug option of printing the board in serial
+  /* The program then reads what intInput is equal to. 
+  if it is equal to 0 the first button from the left is being pressed, going up to the right up to 3. If intInput is equal to 4 no button is being pressed. */
+  // when button 3 is pressed turn on debug option of printing the board in serial -> do we need this???
+  /* if button 3 is pressed the game will activate or deactivate a debug mode 
+  where the whole board is printed in the serial monitor to assist in finding issues in the program. */
   if (intInput == 3){
     if (bolSerialBoard == false){
       Serial.println("Serial Board Active");
@@ -233,7 +237,9 @@ void buttonsMenu(){
     intDiff = 2;
     intGameSpeed = intGameSpeedHard;
   }
-}</p><p>// checks the buttons and what to do for them while in game
+}
+
+// checks the buttons and what to do for them while in game
 void buttonsGame(){
   if (intInput != 4) {                              //if a button is pressed
     if (bolTilePressed == false){                   //only if bolTilePressed is false trigger action for checking a button press
@@ -246,7 +252,7 @@ void buttonsGame(){
             intLowestTile = intCheckedTile;         //set lowest tile to equal the checked row
           }
         }
-        intCheckedTile--;                           //take one from checkedTile and move onto the next row
+        intCheckedTile--;                           //take one from checkedTile and move onto the next row -> consider expanding the number of rows!!!
         if (intCheckedTile == -1){                  //if it goes off the board trigger game over and set lowest tile to 16 to avoid a forever loop
           Serial.println("No Tile to press");
           gameOver();
@@ -267,14 +273,18 @@ void buttonsGame(){
       }
     }
   }
-}</p><p>void gameOver() {
+}
+
+void gameOver() {
   Serial.println("Game Over!");
   Serial.print("Your score was: ");
   Serial.println(intScore);
   Serial.print("Your speed was: ");
   Serial.println(intDelay);
   bolPlay = false;
-}</p><p>// checks for player input
+}
+
+// checks for player input
 void input() {
   intEnter = digitalRead(btnEnter);   //read enter
   //read which of the other inputs, or if none set to 4
@@ -293,7 +303,11 @@ void input() {
     //if no button is pressed reset bolTilePressed
     bolTilePressed = false;
   }
-}</p><p>//checks the bottom of the board for failure
+}
+
+/* using a loop this code checks the bottom row of arrGame for any unhit tiles (tiles equal to 1),
+if there is an unhit tile at the bottom of the screen it will flash the tile and then trigger the game over function. */
+//checks the bottom of the board for failure
 void bottomCheck() {
   for (int i = 0; i <= 3; i++){         //for the 4 collumns
     if (arrGame[15][i] == 1){           //if a tile is at the bottom
@@ -313,7 +327,9 @@ void bottomCheck() {
       gameOver();
     }
   }
-}</p><p>//prints the board into the serial monitor if bolSerialBoard is true
+}
+
+//prints the board into the serial monitor if bolSerialBoard is true
 void writeSerial() {
   if (bolSerialBoard == true){
     for (int i = 0; i <= 15; i ++){
@@ -324,4 +340,4 @@ void writeSerial() {
       Serial.println("");
     }
   }
-}</p>
+}
