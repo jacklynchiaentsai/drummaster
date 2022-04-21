@@ -141,10 +141,12 @@ void playBoard() {
   arrGame[0][random(0, 4)] = 1;                         //set a random point on the top row to be a tile
   for (int i = 15; i >= 1; i--){                        //working from the bottom of the board to the top
     for (int ii = 0; ii <= 3; ii ++){                   //for each collum
-      arrGame[i][ii] = arrGame[i - 1][ii];
+      arrGame[i][ii] = arrGame[i - 1][ii];              // setting the row to equal whatever the row above it is equal to, making the board move down the LCD's
     }
   }
-}</p><p>//sets the whole board to 0 and resets variables to pregame
+}
+
+//sets the whole board to 0 and resets variables to pregame
 void clearBoard() {
   //reset tick and delay values
   intTick = 0;
