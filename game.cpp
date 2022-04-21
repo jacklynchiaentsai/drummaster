@@ -21,7 +21,7 @@ The numbers in the attached brackets tell the arduino which ports the object sho
 LiquidCrystal lcdLeft(8, 9, 12, 10, 11, 13);
 LiquidCrystal lcdRight(2, 3, 4, 5, 6, 7);
 
-// set up game array
+// set up game array ** potential modification to correspond to tempo of game **
 int arrGame[16][4] = {
   {0, 0, 0, 0},
   {0, 0, 0, 0},
@@ -102,6 +102,7 @@ void loop() {
 }
 
 //cleans the lcd, so any unentered cells arn't left there
+// Without being reset to nothing the LCD's will maintain whatever was written previously
 void clearLcd() {
   for (int i = 0; i <= 15; i++){
     for (int ii = 0; ii <= 1; ii++){
@@ -111,7 +112,10 @@ void clearLcd() {
       lcdRight.write(" ");
     }
   }
-}</p><p>//draws the board onto the lcd's
+}
+
+//draws the board onto the lcd's
+// # for a tile yet to be hit, or an @ for a hit tile.
 void drawBoard() {
   for (int i = 1; i <= 15; i++){
     //draw collums 1 and 2 on the left LCD
@@ -129,7 +133,9 @@ void drawBoard() {
     if (arrGame[i][3] == 1) {lcdRight.write("#");}
     if (arrGame[i][3] == 2) {lcdRight.write("@");}
   }
-}</p><p>//moves the board down and places a random value to be a tile
+}
+
+//moves the board down and places a random value to be a tile -> ** potential modification we don't want it to be random ** 
 void playBoard() {
   for (int i = 0; i <= 3; i++){arrGame[0][i] = 0;}      //clear the top row
   arrGame[0][random(0, 4)] = 1;                         //set a random point on the top row to be a tile
