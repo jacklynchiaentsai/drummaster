@@ -11,15 +11,16 @@ int intGameSpeedHard = 80;
 /* Although we are calling the ports port 15, 16, 17 and 18, they are labelled on the arduino as A1 A2 A3 and A4, 
 this is because they are ports used specifically for analog inputs, although we are only using them for digital inputs. */
 #define btnEnter A0
-#define btn1 15
-#define btn2 16
-#define btn3 17
-#define btn4 18 // create LCD objects (n, ~, n, ~, ~, n)
+#define btn1 15  // A1 = RED
+#define btn2 16  // A2 = YELLOW
+#define btn3 17  // A3 = GREEN
+#define btn4 18 // create LCD objects (n, ~, n, ~, ~, n) A4 = BLUE
 
 /* tells the arduino that when we call lcdLeft or lcdRight we are refering to a LiquidCrystal object. 
 The numbers in the attached brackets tell the arduino which ports the object should be using to send messages to the LCD when we use their functions. */
-LiquidCrystal lcdLeft(8, 9, 12, 10, 11, 13);
-LiquidCrystal lcdRight(2, 3, 4, 5, 6, 7);
+// LiquidCrystal lcdLeft(8, 9, 12, 10, 11, 13);
+// LiquidCrystal lcdRight(2, 3, 4, 5, 6, 7);
+LiquidCrystal lcd(7, 8, 9, 10, 11, 12);
 
 // set up game array ** potential modification to correspond to tempo of game **
 int arrGame[16][4] = {
@@ -68,9 +69,10 @@ void setup() {
   intDiff = 1;
   intGameSpeed = intGameSpeedMedium;
   
-  //begin lcd's
-  lcdLeft.begin(16,2);
-  lcdRight.begin(16,2);
+  //begin lcd's: set up the LCD's number of columns and rows
+  // lcdLeft.begin(16,2);
+  // lcdRight.begin(16,2);
+  lcd.begin(16, 2);
 }
 
 //the loop which will be run every 10 millisecons
@@ -106,10 +108,15 @@ void loop() {
 void clearLcd() {
   for (int i = 0; i <= 15; i++){
     for (int ii = 0; ii <= 1; ii++){
-      lcdLeft.setCursor(i, ii);
-      lcdLeft.write(" ");
-      lcdRight.setCursor(i, ii);
-      lcdRight.write(" ");
+      
+      // lcdLeft.setCursor(i, ii);
+      // lcdLeft.write(" ");
+      // lcdRight.setCursor(i, ii);
+      // lcdRight.write(" ");
+      
+      lcd.setCursor(i,ii);
+      lcd.write(" ");
+      
     }
   }
 }
@@ -120,6 +127,7 @@ void drawBoard() {
   for (int i = 1; i <= 15; i++){
     //draw collums 1 and 2 on the left LCD
     //if the tile = 0 write nothing, = 1 write "#", = 2 write "@"
+    /*
     lcdLeft.setCursor(i, 1);                        //set to the first collumn (furthest left)
     if (arrGame[i][0] == 1) {lcdLeft.write("#");}
     if (arrGame[i][0] == 2) {lcdLeft.write("@");}
@@ -132,6 +140,16 @@ void drawBoard() {
     lcdRight.setCursor(i, 0);                       //set to the fourth collumn (furthest right)
     if (arrGame[i][3] == 1) {lcdRight.write("#");}
     if (arrGame[i][3] == 2) {lcdRight.write("@");}
+    */
+    
+    lcd.setCursor(i, 1);                        //set to the first collumn (furthest left)
+    if (arrGame[i][0] == 1) {lcd.write("X");}
+    if (arrGame[i][0] == 2) {lcd.write("@");}
+    lcd.setCursor(i, 0);                        //set to the second collumn (centre left)
+    if (arrGame[i][1] == 1) {lcd.write("X");}
+    if (arrGame[i][1] == 2) {lcd.write("@");}
+    
+    
   }
 }
 
@@ -162,48 +180,75 @@ void clearBoard() {
 // displays the Main Menu on the LCD's
 void title() {
   //write title onto LCD and space for score
+  /*
   lcdRight.setCursor(0, 0);
   lcdRight.write("Piano Tiles"); //name of game
   lcdRight.setCursor(0, 1);
   lcdRight.write("Score: ");
+  */
+  
+  lcd.setCursor(0, 0);
+  lcd.write("JATs-Piano Tiles"); //name of game
+  lcd.setCursor(0, 1);
+  lcd.write("Score: ");
+  
   //convert the score into a string
   char strScore[3];
   sprintf(strScore, "%d", intScore);
   //display score onto LCD
-  lcdRight.write(strScore);
+  // lcdRight.write(strScore);
+  lcd.write(strScore);
   //add the diffictuly
-  lcdRight.setCursor(10, 1);
+  // lcdRight.setCursor(10, 1);
+  lcd.setCursor(10, 1);
   if (intDiff == 0){
-    lcdRight.write("Easy");
+    // lcdRight.write("Easy");
+    lcd.write("Easy");
   }
   if (intDiff == 1){
-    lcdRight.write("Medium");
+    // lcdRight.write("Medium");
+    lcd.write("Medium");
   }
   if (intDiff == 2){
-    lcdRight.write("Hard");
+    // lcdRight.write("Hard");
+    lcd.write("Hard");
   }
   
-  //Press a little bit of instruction ** potential modification: we might be able to skip the enter **
+  /* we're skipping the enter instruction -> must inform players of the function
+  // Press a little bit of instruction 
   lcdLeft.setCursor(0, 0);
   lcdLeft.write("Press Enter");
   lcdLeft.setCursor(0, 1);
   lcdLeft.write("to begin!");
+  */ 
 }
 
 // checks the buttons and what to do for them while out of game
 void buttonsMenu(){
   // when enter is pressed start the game and reset score value
+  /*
   if (intEnter == 1){
     bolPlay = true;
     intScore = 0;
     playBoard();
     drawBoard();
   }
+  */
+  
+  if (intInput == 3){
+    bolPlay = true;
+    intScore = 0;
+    playBoard();
+    drawBoard();
+  }
+  
   /* The program then reads what intInput is equal to. 
   if it is equal to 0 the first button from the left is being pressed, going up to the right up to 3. If intInput is equal to 4 no button is being pressed. */
+  
   // when button 3 is pressed turn on debug option of printing the board in serial -> do we need this???
   /* if button 3 is pressed the game will activate or deactivate a debug mode 
   where the whole board is printed in the serial monitor to assist in finding issues in the program. */
+  /* we're skipping debugging 
   if (intInput == 3){
     if (bolSerialBoard == false){
       Serial.println("Serial Board Active");
@@ -213,6 +258,8 @@ void buttonsMenu(){
       bolSerialBoard = false;
     }
   }
+  */
+  
   //set game speed to easy difficulty
   if (intInput == 0){
     Serial.print("Game set to easy (");
@@ -294,8 +341,12 @@ void input() {
   if (digitalRead(btn4) == HIGH){intInput = 3;} else {
     intInput = 4;
   }}}}
+  
+  /* ommiting the enter button
   //serial print the inputs
   if (intEnter == 1){Serial.println("Enter Pressed! ");}
+  */
+  
   if (intInput != 4){
     Serial.print("Button Press: ");
     Serial.println(intInput);
