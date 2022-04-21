@@ -157,11 +157,13 @@ void clearBoard() {
       arrGame[i][ii] = 0;
     }
   }
-}</p><p>// displays the Main Menu on the LCD's
+}
+
+// displays the Main Menu on the LCD's
 void title() {
   //write title onto LCD and space for score
   lcdRight.setCursor(0, 0);
-  lcdRight.write("Piano Tiles");
+  lcdRight.write("Piano Tiles"); //name of game
   lcdRight.setCursor(0, 1);
   lcdRight.write("Score: ");
   //convert the score into a string
@@ -180,12 +182,15 @@ void title() {
   if (intDiff == 2){
     lcdRight.write("Hard");
   }
+  
   //Press a little bit of instruction
   lcdLeft.setCursor(0, 0);
   lcdLeft.write("Press Enter");
   lcdLeft.setCursor(0, 1);
   lcdLeft.write("to begin!");
-}</p><p>// checks the buttons and what to do for them while out of game
+}
+
+// checks the buttons and what to do for them while out of game
 void buttonsMenu(){
   // when enter is pressed start the game and reset score value
   if (intEnter == 1){
