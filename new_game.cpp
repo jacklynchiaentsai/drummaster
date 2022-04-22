@@ -67,6 +67,15 @@ boolean bolSerialBoard;     //when true will print the board in the serial monit
 
 //the setup that will be run once: setting default values
 void setup() {
+  ss.pinMode(btnEnter, INPUT_PULLUP);
+  ss.pinMode(btn1, INPUT_PULLUP);
+  ss.pinMode(btn2, INPUT_PULLUP);
+  ss.pinMode(btn3, INPUT_PULLUP);
+  ss.analogWrite(PWM1, 127);
+  ss.analogWrite(PWM2, 127);
+  ss.analogWrite(PWM3, 127);
+  ss.analogWrite(PWM4, 127);
+  
   Serial.begin(9600);       //start the serial monitor
   //set up the variables
   bolPlay = false;    // the game doesn't start playing immediately
