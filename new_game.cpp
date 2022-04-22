@@ -67,6 +67,35 @@ boolean bolSerialBoard;     //when true will print the board in the serial monit
 
 //the setup that will be run once: setting default values
 void setup() {
+  
+  Serial.begin(9600);       //start the serial monitor
+  
+  while (!Serial) delay(10);   // wait until serial port is opened
+
+  Serial.println(F("Adafruit PID 5296 I2C QT 4x LED Arcade Buttons test!"));
+  
+  if (!ss.begin(DEFAULT_I2C_ADDR)) {
+    Serial.println(F("seesaw not found!"));
+    while(1) delay(10);
+  }
+
+  uint16_t pid;
+  uint8_t year, mon, day;
+  
+  ss.getProdDatecode(&pid, &year, &mon, &day);
+  Serial.print("seesaw found PID: ");
+  Serial.print(pid);
+  Serial.print(" datecode: ");
+  Serial.print(2000+year); Serial.print("/"); 
+  Serial.print(mon); Serial.print("/"); 
+  Serial.println(day);
+
+  if (pid != 5296) {
+    Serial.println(F("Wrong seesaw PID"));
+    while (1) delay(10);
+  }
+
+  Serial.println(F("seesaw started OK!"));
   ss.pinMode(btnEnter, INPUT_PULLUP);
   ss.pinMode(btn1, INPUT_PULLUP);
   ss.pinMode(btn2, INPUT_PULLUP);
@@ -76,7 +105,6 @@ void setup() {
   ss.analogWrite(PWM3, 127);
   ss.analogWrite(PWM4, 127);
   
-  Serial.begin(9600);       //start the serial monitor
   //set up the variables
   bolPlay = false;    // the game doesn't start playing immediately
   intScore = 0;
