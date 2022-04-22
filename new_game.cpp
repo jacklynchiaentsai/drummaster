@@ -372,9 +372,9 @@ void gameOver() {
 void input() {
   intEnter = ss.digitalRead(btnEnter);   //read enter
   //read which of the other inputs, or if none set to 4
-  if (ss.digitalRead(btn1)== HIGH){intInput = 0;} else {
-  if (ss.digitalRead(btn2)== HIGH){intInput = 1;} else {
-  if (ss.digitalRead(btn3)== HIGH){intInput = 2;} else {
+  if (! ss.digitalRead(btn1)){intInput = 0;} else {
+  if (! ss.digitalRead(btn2)){intInput = 1;} else {
+  if (! ss.digitalRead(btn3)){intInput = 2;} else {
     intInput = 4;
   }}}
   
