@@ -131,10 +131,13 @@ void playBoard() {
     arrGame[i][1] = 0;
   }
   
-  for (int i = 0; i < 4; i++){
+  int tileIndex = random(0,4);
+  arrGame[tileIndex][1] = 1;
+  /* for (int i = 0; i < 4; i++){
     int currentIndex = tileArr[i];
     arrGame[currentIndex][1] = random(0,2);   // on the tile points on the top row we each set whether it's a tile or no
   }
+  */
   
   // moving the board down
   for (int i = 0; i < 15 ; i++){
@@ -222,6 +225,13 @@ void buttonsMenu(){
 
 // checks the buttons and what to do for them while in game
 void buttonsGame(){
+  if (intInput != 4){
+    if (bolTilePressed == false){
+      bolTilePressed = true;
+      
+    }
+  }
+  
   if (intInput != 4) {                              //if a button is pressed
     if (bolTilePressed == false){                   //only if bolTilePressed is false trigger action for checking a button press
       bolTilePressed = true;                        //then set bolTilePressed to true to make sure it isn't acidentilly triggered again
