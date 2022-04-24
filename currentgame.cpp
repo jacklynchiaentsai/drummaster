@@ -76,7 +76,7 @@ void setup() {
 void loop(){
   input();
   if (bolPlay == true){
-    
+    clearLcd();
   } else{
     clearLcd();                   //clean the LCDs before drawing
     title(); 
@@ -127,10 +127,12 @@ void seesawsetup(){
 
 //checks for player input
 void input() {
+  boolean triggerintInput4 = true;
   bolTilePressed = false;
   if (! ss.digitalRead(SWITCH1)) {
     intInput = 0;
     bolTilePressed = true;
+    triggerintInput4 = false;
     Serial.println("Switch 1 pressed");
     ss.analogWrite(PWM1, incr);
     incr += 5;
@@ -141,6 +143,7 @@ void input() {
   if (! ss.digitalRead(SWITCH2)) {
     intInput = 1;
     bolTilePressed = true;
+    triggerintInput4 = false;
     Serial.println("Switch 2 pressed");
     ss.analogWrite(PWM2, incr);
     incr += 5;
@@ -151,6 +154,7 @@ void input() {
   if (! ss.digitalRead(SWITCH3)) {
     intInput = 2;
     bolTilePressed = true;
+    triggerintInput4 = false;
     Serial.println("Switch 3 pressed");
     ss.analogWrite(PWM3, incr);
     incr += 5;
@@ -161,13 +165,17 @@ void input() {
   if (! ss.digitalRead(SWITCH4)) {
     intEnter = 1;
     bolTilePressed = true;
+    triggerintInput4 = false;
     Serial.println("Switch 4 pressed");
     ss.analogWrite(PWM4, incr);
     incr += 5;
-    return;
-    
+    // return;   
   } else {
     ss.analogWrite(PWM4, 0);
+  }
+  
+  if (triggerintInput4 == true){
+    intInput = 4;
   }
   delay(10);
 }
@@ -253,6 +261,15 @@ void clearLcd() {
     for (int ii = 0; ii <= 1; ii++){
       lcd.setCursor(i, ii);
       lcd.write(" ");
+    }
+  }
+}
+
+void buttonsGame(){
+  if (intInput != 4){   //if a button is pressed
+    if (bolTilePressed == false){                   //only if bolTilePressed is false trigger action for checking a button press
+      bolTilePressed = true;                        //then set bolTilePressed to true to make sure it isn't acidentilly triggered again
+      
     }
   }
 }
