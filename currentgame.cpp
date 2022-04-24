@@ -41,7 +41,6 @@ int arrGame[16][2] = {   // 2 rows 16 columns on one lcd
   {0, 0}
 };
 
-int ButtonArray = {0,0,0,0}
 
 //set up variables for the game
 boolean bolPlay;            //tracks if the player 
@@ -77,6 +76,7 @@ void setup() {
 void loop(){
   input();
   title(); 
+  buttonsMenu();
 }
 
 void seesawsetup(){
@@ -120,45 +120,49 @@ void seesawsetup(){
 
 //checks for player input
 void input() {
-  intEnter = digitalRead(SWITCH4);   //read enter
-  //read which of the other inputs, or if none set to 4
-  if (digitalRead(SWITCH1) == HIGH){
+  bolTilePressed = false;
+  if (! ss.digitalRead(SWITCH1)) {
     intInput = 0;
+    bolTilePressed = true;
     Serial.println("Switch 1 pressed");
     ss.analogWrite(PWM1, incr);
     incr += 5;
   } else {
     ss.analogWrite(PWM1, 0);
-    if (digitalRead(SWITCH2) == HIGH){
-      intInput = 1;
-      Serial.println("Switch 2 pressed");
-      ss.analogWrite(PWM2, incr);
-      incr += 5;
-    } else{
-      ss.analogWrite(PWM2, 0);
-      if (digitalRead(SWITCH3) == HIGH){
-        intInput = 2;
-        Serial.println("Switch 3 pressed");
-        ss.analogWrite(PWM3, incr);
-        incr += 5;
-      } else{
-        ss.analogWrite(PWM3, 0);
-        intInput = 4;
-      }
-    
-    }
   }
-
-  //serial print the inputs
-  if (intEnter == 1){Serial.println("Enter Pressed! ");}
-  if (intInput != 4){
-    Serial.print("Button Press: ");
-    Serial.println(intInput);
+  
+  if (! ss.digitalRead(SWITCH2)) {
+    intInput = 1;
+    bolTilePressed = true;
+    Serial.println("Switch 2 pressed");
+    ss.analogWrite(PWM2, incr);
+    incr += 5;
   } else {
-    //if no button is pressed reset bolTilePressed
-    bolTilePressed = false;
+    ss.analogWrite(PWM2, 0);
   }
-
+  
+  if (! ss.digitalRead(SWITCH3)) {
+    intInput = 2;
+    bolTilePressed = true;
+    Serial.println("Switch 3 pressed");
+    ss.analogWrite(PWM3, incr);
+    incr += 5;
+  } else {
+    ss.analogWrite(PWM3, 0);
+  }
+  
+  if (! ss.digitalRead(SWITCH4)) {
+    intEnter == 1;
+    bolTilePressed = true;
+    Serial.println("Switch 4 pressed");
+    ss.analogWrite(PWM4, incr);
+    incr += 5;
+    return;
+    
+  } else {
+    ss.analogWrite(PWM4, 0);
+  }
+  delay(10);
 }
 
 void title() {
@@ -175,13 +179,50 @@ void title() {
   //add the diffictuly
   lcd.setCursor(10, 1);
   if (intDiff == 0){
-    lcdRight.write("Easy");
+    lcd.write("Easy");
   }
   if (intDiff == 1){
-    lcdRight.write("Medium");
+    lcd.write("Medium");
   }
   if (intDiff == 2){
-    lcdRight.write("Hard");
+    lcd.write("Hard");
   }
   
+}
+
+void buttonsMenu(){
+  // when enter is pressed start the game and reset score value
+  if (intEnter == 1){
+    bolPlay = true;
+    intScore = 0;
+    // playBoard();
+    // drawBoard();
+  }
+  
+  //set game speed to easy difficulty
+  if (intInput == 0){
+    Serial.print("Game set to easy (");
+    Serial.print(intGameSpeedEasy);
+    Serial.println("ms acceleration)");
+    intDiff = 0;
+    intGameSpeed = intGameSpeedEasy;
+  }
+  
+  //set game speed to medium difficulty
+  if (intInput == 1){
+    Serial.print("Game set to medium (");
+    Serial.print(intGameSpeedMedium);
+    Serial.println("ms acceleration)");
+    intDiff = 1;
+    intGameSpeed = intGameSpeedMedium;
+  }
+  
+  //set game speed to hard difficulty
+  if (intInput == 2){
+    Serial.print("Game set to hard (");
+    Serial.print(intGameSpeedHard);
+    Serial.println("ms acceleration)");
+    intDiff = 2;
+    intGameSpeed = intGameSpeedHard;
+  }
 }
