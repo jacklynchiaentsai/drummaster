@@ -75,8 +75,15 @@ void setup() {
 
 void loop(){
   input();
-  title(); 
-  buttonsMenu();
+  if (bolPlay == true){
+    
+  } else{
+    clearLcd();                   //clean the LCDs before drawing
+    title(); 
+    buttonsMenu();
+    clearBoard();                 //ensure the whole board = 0
+  }
+  delay(10);                      //delay the arduino by a short moment
 }
 
 void seesawsetup(){
@@ -152,7 +159,7 @@ void input() {
   }
   
   if (! ss.digitalRead(SWITCH4)) {
-    intEnter == 1;
+    intEnter = 1;
     bolTilePressed = true;
     Serial.println("Switch 4 pressed");
     ss.analogWrite(PWM4, incr);
@@ -179,13 +186,13 @@ void title() {
   //add the diffictuly
   lcd.setCursor(10, 1);
   if (intDiff == 0){
-    lcd.write("Easy");
+    lcd.write("Easy  ");
   }
   if (intDiff == 1){
     lcd.write("Medium");
   }
   if (intDiff == 2){
-    lcd.write("Hard");
+    lcd.write("Hard  ");
   }
   
 }
@@ -224,5 +231,28 @@ void buttonsMenu(){
     Serial.println("ms acceleration)");
     intDiff = 2;
     intGameSpeed = intGameSpeedHard;
+  }
+}
+
+//sets the whole board to 0 and resets variables to pregame
+void clearBoard() {
+  //reset tick and delay values
+  intTick = 0;
+  intDelay = 1000;
+  //go through the board and set everything to 0
+  for (int i = 0; i <= 15; i++){
+    for (int ii = 0; ii <= 1; ii++){
+      arrGame[i][ii] = 0;
+    }
+  }
+}
+
+//cleans the lcd, so any unentered cells arn't left there
+void clearLcd() {
+  for (int i = 0; i <= 15; i++){
+    for (int ii = 0; ii <= 1; ii++){
+      lcd.setCursor(i, ii);
+      lcd.write(" ");
+    }
   }
 }
