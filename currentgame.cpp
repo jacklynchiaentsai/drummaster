@@ -82,6 +82,7 @@ void loop(){
       playBoard();                //move the board and add a new tile
       clearLcd();                 //clean the LCDs before drawing
       drawBoard();                //draw the board onto the lcd's
+      bottomCheck();
       intTick = 0;
     } else {
       buttonsGame();                         //check for player inputs
@@ -362,4 +363,25 @@ void gameOver() {
   Serial.print("Your speed was: ");
   Serial.println(intDelay);
   bolPlay = false;
+}
+
+void bottomCheck() {
+  for (int i = 0; i <= 15; i++){         //for the 4 collumns
+    if (arrGame[i][1] == 1){           //if a tile is at the bottom
+      Serial.println("Tile at bottom");
+      arrGame[i][1] = 2;
+      drawBoard();
+      delay(400);
+      arrGame[i][1] = 1;
+      drawBoard();
+      delay(400);
+      arrGame[i][1] = 2;
+      drawBoard();
+      delay(400);
+      arrGame[i][1] = 1;
+      drawBoard();
+      delay(400);
+      gameOver();
+    }
+  }
 }
