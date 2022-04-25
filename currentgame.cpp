@@ -77,7 +77,18 @@ void setup() {
 void loop(){
   input();
   if (bolPlay == true){
-  
+    if (intTick >= intDelay){     //check to see if the game should play a turn or continue to wait
+      buttonsGame();              //check for player inputs
+      playBoard();                //move the board and add a new tile
+      clearLcd();                 //clean the LCDs before drawing
+      drawBoard();                //draw the board onto the lcd's
+      intTick = 0;
+    } else {
+      buttonsGame();                         //check for player inputs
+      clearLcd();                            //clean the LCDs before drawing
+      drawBoard();                           //draw the board onto the lcd's
+      intTick = intTick + intGameSpeed;      //add to tick
+    }
   } else{
     clearLcd();                   //clean the LCDs before drawing
     title(); 
@@ -305,14 +316,50 @@ void drawBoard() {
   }
 }
 
-/* to be implemented
 void buttonsGame(){
   if (intInput != 4){   //if a button is pressed
     if (bolTilePressed == false){                   //only if bolTilePressed is false trigger action for checking a button press
       bolTilePressed = true;                        //then set bolTilePressed to true to make sure it isn't acidentilly triggered again
-      
-      
+      int inputToTile = 3 - intInput;   //setting the button input that corresponds to its tileIndex
+      inputToTile = abs(inputToTile);
+      if (arrGame[tileIndex[inputToTile]][1] == 1){ //if the tile pressed is an unclicked one
+          arrGame[tileIndex[inputToTile]][1] = 2;     //set to 2 to say it's been press
+          intScore++;                               //add one to score
+          if (intDelay > 100){                      //as long as int delay is not lower than 100
+            intDelay = intDelay - 20;               //take a value from it
+          }
+       } else {
+          Serial.println("Wrong button pressed");
+          gameOver();                               //otherwise game over
+       }
     }
   }
 }
-*/
+
+void gameOver() {
+  clearLcd();
+  lcd.setCursor(0, 0);
+  lcd.write("Game Over-");
+  lcd.setCursor(10, 0);
+  if (intDiff == 0){
+    lcd.write("Easy");
+  }
+  if (intDiff == 1){
+    lcd.write("Medium");
+  }
+  if (intDiff == 2){
+    lcd.write("Hard");
+  }
+  
+  lcd.setCursor(0, 1);
+  lcd.write("Score: ");
+  //convert the score into a string
+  char strScore[3];
+  sprintf(strScore, "%d", intScore);
+  //display score onto LCD
+  lcd.write(strScore);
+ 
+  Serial.print("Your speed was: ");
+  Serial.println(intDelay);
+  bolPlay = false;
+}
