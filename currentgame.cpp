@@ -41,6 +41,7 @@ int arrGame[16][2] = {   // 2 rows 16 columns on one lcd
   {0, 0}
 };
 
+int tileIndex[4] = {1,4,7,10};
 
 //set up variables for the game
 boolean bolPlay;            //tracks if the player 
@@ -76,7 +77,7 @@ void setup() {
 void loop(){
   input();
   if (bolPlay == true){
-    clearLcd();
+  
   } else{
     clearLcd();                   //clean the LCDs before drawing
     title(); 
@@ -163,7 +164,7 @@ void input() {
   }
   
   if (! ss.digitalRead(SWITCH4)) {
-    intEnter = 1;
+    intInput = 3;
     bolTilePressed = true;
     triggerintInput4 = false;
     Serial.println("Switch 4 pressed");
@@ -194,24 +195,25 @@ void title() {
   //add the diffictuly
   lcd.setCursor(10, 1);
   if (intDiff == 0){
-    lcd.write("Easy  ");
+    lcd.write("Easy");
   }
   if (intDiff == 1){
     lcd.write("Medium");
   }
   if (intDiff == 2){
-    lcd.write("Hard  ");
+    lcd.write("Hard");
   }
   
 }
 
 void buttonsMenu(){
   // when enter is pressed start the game and reset score value
-  if (intEnter == 1){
+  if (intInput == 3){
     bolPlay = true;
     intScore = 0;
-    // playBoard();
-    // drawBoard();
+    clearLcd(); // note this is additional!
+    playBoard();
+    drawBoard();
   }
   
   //set game speed to easy difficulty
@@ -265,11 +267,42 @@ void clearLcd() {
   }
 }
 
+void playBoard() {
+  
+  for (int i = 0 ; i <= 15 ; i++){   //clear the top row
+    arrGame[i][0] = 0;
+  }
+  
+  int selectedTile = tileIndex[random(0,4)];
+  arrGame[selectedTile][0] = 1;     //set a random point on the top row to be a tile
+  
+  for (int i = 0; i <= 15; i++){
+    arrGame[i][1] = arrGame[i][0];    // setting the row to equal whatever the row above it is equal to, making the board move down the LCD's
+  }
+  
+}
+
+void drawBoard() {
+  for (int i = 0; i <= 15; i++){
+    //draw collums 1 and 2 on the left LCD
+    //if the tile = 0 write nothing, = 1 write "X", = 2 write "@"
+    lcd.setCursor(i, 0);                        //set to the top row
+    if (arrGame[i][0] == 1) {lcd.write("X");}
+    if (arrGame[i][0] == 2) {lcd.write("@");}
+    lcd.setCursor(i, 1);                        //set to the second collumn (centre left)
+    if (arrGame[i][1] == 1) {lcd.write("X");}
+    if (arrGame[i][1] == 2) {lcd.write("@");}
+  }
+}
+
+/* to be implemented
 void buttonsGame(){
   if (intInput != 4){   //if a button is pressed
     if (bolTilePressed == false){                   //only if bolTilePressed is false trigger action for checking a button press
       bolTilePressed = true;                        //then set bolTilePressed to true to make sure it isn't acidentilly triggered again
       
+      
     }
   }
 }
+*/
