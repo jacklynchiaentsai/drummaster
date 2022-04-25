@@ -25,15 +25,15 @@ LiquidCrystal lcd(7, 8, 9, 10, 11, 12);
 int arrGame[16][2] = {   // 2 rows 16 columns on one lcd
   {0, 0},
   {0, 0},
+  {3, 3},
   {0, 0},
+  {3, 3},
   {0, 0},
+  {3, 3},
   {0, 0},
+  {3, 3},
   {0, 0},
-  {0, 0},
-  {0, 0},
-  {0, 0},
-  {0, 0},
-  {0, 0},
+  {3, 3},
   {0, 0},
   {0, 0},
   {0, 0},
@@ -41,7 +41,7 @@ int arrGame[16][2] = {   // 2 rows 16 columns on one lcd
   {0, 0}
 };
 
-int tileIndex[4] = {1,4,7,10};
+int tileIndex[4] = {3,5,7,9};
 
 //set up variables for the game
 boolean bolPlay;            //tracks if the player 
@@ -249,10 +249,14 @@ void clearBoard() {
   //reset tick and delay values
   intTick = 0;
   intDelay = 1000;
-  //go through the board and set everything to 0
+  //go through the board and set everything pregame arrGame
   for (int i = 0; i <= 15; i++){
     for (int ii = 0; ii <= 1; ii++){
-      arrGame[i][ii] = 0;
+      if (i == 2 || i == 4 || i == 6 || i == 8 || i == 10){
+        arrGame[i][ii] = 3;
+      } else{
+        arrGame[i][ii] = 0;
+      }
     }
   }
 }
@@ -270,7 +274,11 @@ void clearLcd() {
 void playBoard() {
   
   for (int i = 0 ; i <= 15 ; i++){   //clear the top row
-    arrGame[i][0] = 0;
+    if (i == 2 || i == 4 || i == 6 || i == 8 || i == 10){
+        arrGame[i][0] = 3;
+    } else{
+        arrGame[i][0] = 0;
+    }
   }
   
   int selectedTile = tileIndex[random(0,4)];
@@ -289,9 +297,11 @@ void drawBoard() {
     lcd.setCursor(i, 0);                        //set to the top row
     if (arrGame[i][0] == 1) {lcd.write("X");}
     if (arrGame[i][0] == 2) {lcd.write("@");}
+    if (arrGame[i][0] == 3) {lcd.write("|");}
     lcd.setCursor(i, 1);                        //set to the second collumn (centre left)
     if (arrGame[i][1] == 1) {lcd.write("X");}
     if (arrGame[i][1] == 2) {lcd.write("@");}
+    if (arrGame[i][1] == 3) {lcd.write("|");}
   }
 }
 
