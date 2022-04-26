@@ -1,3 +1,4 @@
+// Author: Jacklyn (Chia-En) Tsai
 #include <LiquidCrystal.h>
 
 #include "Adafruit_seesaw.h"
