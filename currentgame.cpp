@@ -57,6 +57,7 @@ int intGameSpeed;
 //abit of debug options
 boolean bolSerialBoard;     //when true will print the board in the serial monitor 
 
+int checkBottomcounter;
 uint8_t incr = 0;
 
 //the setup that will be run once
@@ -72,29 +73,37 @@ void setup() {
   intGameSpeed = intGameSpeedMedium;
   //begin lcd's
   lcd.begin(16,2);
+  checkBottomcounter = 0;
 }
 
 void loop(){
   input();
   if (bolPlay == true){
     if (intTick >= intDelay){     //check to see if the game should play a turn or continue to wait
-      buttonsGame();              //check for player inputs
+      if (checkBottomcounter >= 1){
+          bottomCheck();
+      }
+      Serial.println("~~~~~~~~~");//print to signify the board moving on
       playBoard();                //move the board and add a new tile
-      clearLcd();                 //clean the LCDs before drawing
-      drawBoard();                //draw the board onto the lcd's
-      bottomCheck();
+      buttonsGame();              //check for player inputs
+      // clearLcd();                 //clean the LCDs before drawing
+      // drawBoard();                //draw the board onto the lcd's
+      // bottomCheck();
       intTick = 0;
+      checkBottomcounter++;
     } else {
       buttonsGame();                         //check for player inputs
       clearLcd();                            //clean the LCDs before drawing
       drawBoard();                           //draw the board onto the lcd's
       intTick = intTick + intGameSpeed;      //add to tick
     }
+    
   } else{
     clearLcd();                   //clean the LCDs before drawing
     title(); 
     buttonsMenu();
     clearBoard();                 //ensure the whole board = 0
+    checkBottomcounter = 0;
   }
   delay(10);                      //delay the arduino by a short moment
 }
@@ -141,10 +150,8 @@ void seesawsetup(){
 //checks for player input
 void input() {
   boolean triggerintInput4 = true;
-  bolTilePressed = false;
   if (! ss.digitalRead(SWITCH1)) {
     intInput = 0;
-    bolTilePressed = true;
     triggerintInput4 = false;
     Serial.println("Switch 1 pressed");
     ss.analogWrite(PWM1, incr);
@@ -155,7 +162,6 @@ void input() {
   
   if (! ss.digitalRead(SWITCH2)) {
     intInput = 1;
-    bolTilePressed = true;
     triggerintInput4 = false;
     Serial.println("Switch 2 pressed");
     ss.analogWrite(PWM2, incr);
@@ -166,7 +172,6 @@ void input() {
   
   if (! ss.digitalRead(SWITCH3)) {
     intInput = 2;
-    bolTilePressed = true;
     triggerintInput4 = false;
     Serial.println("Switch 3 pressed");
     ss.analogWrite(PWM3, incr);
@@ -177,7 +182,6 @@ void input() {
   
   if (! ss.digitalRead(SWITCH4)) {
     intInput = 3;
-    bolTilePressed = true;
     triggerintInput4 = false;
     Serial.println("Switch 4 pressed");
     ss.analogWrite(PWM4, incr);
@@ -189,6 +193,7 @@ void input() {
   
   if (triggerintInput4 == true){
     intInput = 4;
+    bolTilePressed = false;
   }
   delay(10);
 }
@@ -225,7 +230,7 @@ void buttonsMenu(){
     intScore = 0;
     clearLcd(); // note this is additional!
     playBoard();
-    drawBoard();
+    // drawBoard();
   }
   
   //set game speed to easy difficulty
@@ -285,6 +290,21 @@ void clearLcd() {
 
 void playBoard() {
   
+  clearTopRow();
+  
+  int selectedTile = tileIndex[random(0,4)];
+  arrGame[selectedTile][0] = 1;     //set a random point on the top row to be a tile
+  drawBoard();
+  delay(750);
+  for (int i = 0; i <= 15; i++){
+    arrGame[i][1] = arrGame[i][0];    // setting the row to equal whatever the row above it is equal to, making the board move down the LCD's
+  }
+  clearTopRow();
+  clearLcd();
+  drawBoard();
+}
+
+void clearTopRow(){
   for (int i = 0 ; i <= 15 ; i++){   //clear the top row
     if (i == 2 || i == 4 || i == 6 || i == 8 || i == 10){
         arrGame[i][0] = 3;
@@ -292,14 +312,6 @@ void playBoard() {
         arrGame[i][0] = 0;
     }
   }
-  
-  int selectedTile = tileIndex[random(0,4)];
-  arrGame[selectedTile][0] = 1;     //set a random point on the top row to be a tile
-  
-  for (int i = 0; i <= 15; i++){
-    arrGame[i][1] = arrGame[i][0];    // setting the row to equal whatever the row above it is equal to, making the board move down the LCD's
-  }
-  
 }
 
 void drawBoard() {
@@ -362,26 +374,29 @@ void gameOver() {
  
   Serial.print("Your speed was: ");
   Serial.println(intDelay);
+  delay(10000);
   bolPlay = false;
 }
 
+
 void bottomCheck() {
-  for (int i = 0; i <= 15; i++){         //for the 4 collumns
-    if (arrGame[i][1] == 1){           //if a tile is at the bottom
-      Serial.println("Tile at bottom");
-      arrGame[i][1] = 2;
-      drawBoard();
-      delay(400);
-      arrGame[i][1] = 1;
-      drawBoard();
-      delay(400);
-      arrGame[i][1] = 2;
-      drawBoard();
-      delay(400);
-      arrGame[i][1] = 1;
-      drawBoard();
-      delay(400);
-      gameOver();
+    for (int i = 0; i <= 15; i++){         //for the 4 collumns
+      if (arrGame[i][1] == 1){           //if a tile is at the bottom
+        Serial.println("Tile at bottom");
+        arrGame[i][1] = 2;
+        drawBoard();
+        delay(400);
+        arrGame[i][1] = 1;
+        drawBoard();
+        delay(400);
+        arrGame[i][1] = 2;
+        drawBoard();
+        delay(400);
+        arrGame[i][1] = 1;
+        drawBoard();
+        delay(400);
+        gameOver();
+      }
     }
-  }
+  
 }
