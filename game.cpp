@@ -17,9 +17,9 @@
 
 Adafruit_seesaw ss;
 
-int intGameSpeedEasy = 10;
-int intGameSpeedMedium = 25;
-int intGameSpeedHard = 80;
+int intGameSpeedEasy = 40;
+int intGameSpeedMedium = 80;
+int intGameSpeedHard = 100;
 
 LiquidCrystal lcd(7, 8, 9, 10, 11, 12);
 
@@ -59,6 +59,7 @@ int intGameSpeed;
 boolean bolSerialBoard;     //when true will print the board in the serial monitor 
 
 int checkBottomcounter;
+boolean bottomError;
 uint8_t incr = 0;
 
 //the setup that will be run once
@@ -75,6 +76,7 @@ void setup() {
   //begin lcd's
   lcd.begin(16,2);
   checkBottomcounter = 0;
+  bottomError = false;
 }
 
 void loop(){
@@ -82,7 +84,12 @@ void loop(){
   if (bolPlay == true){
     if (intTick >= intDelay){     //check to see if the game should play a turn or continue to wait
       if (checkBottomcounter >= 1){
+          Serial.println(checkBottomcounter);
           bottomCheck();
+          if (bottomError == true){
+            return;  
+          }
+          
       }
       Serial.println("~~~~~~~~~");//print to signify the board moving on
       playBoard();                //move the board and add a new tile
@@ -105,6 +112,7 @@ void loop(){
     buttonsMenu();
     clearBoard();                 //ensure the whole board = 0
     checkBottomcounter = 0;
+    bottomError = false;
   }
   delay(10);                      //delay the arduino by a short moment
 }
@@ -202,7 +210,7 @@ void input() {
 void title() {
   //write title onto LCD and space for score
   lcd.setCursor(0, 0);
-  lcd.write("JATs-Piano Tiles");
+  lcd.write("JATs-Drum Master");
   lcd.setCursor(0, 1);
   lcd.write("Score: ");
   //convert the score into a string
@@ -296,7 +304,7 @@ void playBoard() {
   int selectedTile = tileIndex[random(0,4)];
   arrGame[selectedTile][0] = 1;     //set a random point on the top row to be a tile
   drawBoard();
-  delay(750);
+  delay(500);
   for (int i = 0; i <= 15; i++){
     arrGame[i][1] = arrGame[i][0];    // setting the row to equal whatever the row above it is equal to, making the board move down the LCD's
   }
@@ -375,7 +383,7 @@ void gameOver() {
  
   Serial.print("Your speed was: ");
   Serial.println(intDelay);
-  delay(10000);
+  delay(7500);
   bolPlay = false;
 }
 
@@ -396,7 +404,9 @@ void bottomCheck() {
         arrGame[i][1] = 1;
         drawBoard();
         delay(400);
+        bottomError = true;
         gameOver();
+        break;
       }
     }
   
