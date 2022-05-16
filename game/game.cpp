@@ -1,4 +1,4 @@
-// Author: Jacklyn (Chia-En) Tsai
+// Author: Jacklyn Chia-En Tsai
 #include <LiquidCrystal.h>
 
 #include "Adafruit_seesaw.h"
@@ -17,13 +17,14 @@
 
 Adafruit_seesaw ss;
 
-int intGameSpeedEasy = 40;
-int intGameSpeedMedium = 80;
-int intGameSpeedHard = 100;
+int intGameSpeedEasy = 70;
+int intGameSpeedMedium = 100;
+int intGameSpeedHard = 150;
 
 LiquidCrystal lcd(7, 8, 9, 10, 11, 12);
 
-int arrGame[16][2] = {   // 2 rows 16 columns on one lcd
+// lcd display: 2 rows 16 columns on one lcd
+int arrGame[16][2] = {   
   {0, 0},
   {0, 0},
   {3, 3},
@@ -64,7 +65,7 @@ uint8_t incr = 0;
 
 //the setup that will be run once
 void setup() {
-  seesawsetup();
+  seesawsetup();  // setting up the seesaw for the buttons
   
   //set up the variables
   bolPlay = false;
@@ -98,7 +99,7 @@ void loop(){
       // drawBoard();                //draw the board onto the lcd's
       // bottomCheck();
       intTick = 0;
-      checkBottomcounter++;
+      checkBottomcounter++;   //check bottom only after tile has dropped & player has input opportunity
     } else {
       buttonsGame();                         //check for player inputs
       clearLcd();                            //clean the LCDs before drawing
@@ -106,7 +107,7 @@ void loop(){
       intTick = intTick + intGameSpeed;      //add to tick
     }
     
-  } else{
+  } else{ // game not started: display menu
     clearLcd();                   //clean the LCDs before drawing
     title(); 
     buttonsMenu();
@@ -201,7 +202,7 @@ void input() {
   }
   
   if (triggerintInput4 == true){
-    intInput = 4;
+    intInput = 4; // intInput == 4 means no buttons are pressed
     bolTilePressed = false;
   }
   delay(10);
@@ -237,7 +238,7 @@ void buttonsMenu(){
   if (intInput == 3){
     bolPlay = true;
     intScore = 0;
-    clearLcd(); // note this is additional!
+    clearLcd(); 
     playBoard();
     // drawBoard();
   }
@@ -297,14 +298,15 @@ void clearLcd() {
   }
 }
 
-void playBoard() {
+void playBoard() {  
   
   clearTopRow();
   
   int selectedTile = tileIndex[random(0,4)];
   arrGame[selectedTile][0] = 1;     //set a random point on the top row to be a tile
   drawBoard();
-  delay(500);
+  delay(300); //time gap between tile drops, can adjust to control game difficulty!
+  //display the tile drop down effect 
   for (int i = 0; i <= 15; i++){
     arrGame[i][1] = arrGame[i][0];    // setting the row to equal whatever the row above it is equal to, making the board move down the LCD's
   }
@@ -326,7 +328,7 @@ void clearTopRow(){
 void drawBoard() {
   for (int i = 0; i <= 15; i++){
     //draw collums 1 and 2 on the left LCD
-    //if the tile = 0 write nothing, = 1 write "X", = 2 write "@"
+    //if the tile = 0 write nothing, = 1 write "X", = 2 write "@", = 3 write "|"
     lcd.setCursor(i, 0);                        //set to the top row
     if (arrGame[i][0] == 1) {lcd.write("X");}
     if (arrGame[i][0] == 2) {lcd.write("@");}
