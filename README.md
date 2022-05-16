@@ -23,4 +23,5 @@ A player has to press a board of four buttons to the rhythm of a song (~30 secon
 | [4-pin Cable](https://www.adafruit.com/product/4210)        | SWITCH1       | `= 0`       |
 | [Button Wires](https://www.adafruit.com/product/1152)       | SWITCH2       | `= 1`       |
 | [LED Buttons](https://www.adafruit.com/product/3490)        | 4      | Blue, Red, Yellow, Green      |
+| [Arduino UNO](https://www.adafruit.com/product/4806)        | 2      | One for Game & One for Music      |
 
