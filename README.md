@@ -16,7 +16,7 @@ A player has to press a board of four buttons to the rhythm of a song (~30 secon
 **Parts List:**  
 |     Name     | Quantity   |   Note  |
 | ------------- | ------------- | --------    |
-| [LCD](https://www.adafruit.com/product/181)         | SWITCH4       | `= 3`       |
+| [LCD](https://www.adafruit.com/product/181)         | 1       | [Wiring Reference](https://learn.adafruit.com/character-lcds/arduino-code)       |
 | [Speaker](https://www.adafruit.com/product/1669)      | 1| [Music Reference](https://create.arduino.cc/projecthub/adithyalokesh17/let-s-make-arduino-sing-with-a-buzzer-ee2e34)       |
 | [4-pin Headers Cable](https://www.adafruit.com/product/4209)       | SWITCH2       | `= 1`       |
 | [STEMMA QT](https://www.adafruit.com/product/5296)        | SWITCH1       | `= 0`       |
