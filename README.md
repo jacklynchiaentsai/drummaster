@@ -9,10 +9,7 @@ A player has to press a board of four buttons to the rhythm of a song (~30 secon
 * Adriana Delagarza - Wiring & Sodering   
 * Alixe Aractingi - Laser Cutting & Assembling   
 * Trishla Gupta - 3D Printing & Assembling   
-* Thomasina Lester - Video & Music      
-    
-**Video Demonstration:**  
-https://www.youtube.com/watch?v=gtKCA8Y4odY   
+* Thomasina Lester - Video & Music       
 
 **Parts List:**  
 |     Name     | Quantity   |   Note  |
