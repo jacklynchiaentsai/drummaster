@@ -5,5 +5,4 @@
 | `green`       | SWITCH2       | `= 1`       |
 | `blue`        | SWITCH1       | `= 0`       |
 
-**Video Demonstration:**  
-https://www.youtube.com/watch?v=gtKCA8Y4odY  
+
